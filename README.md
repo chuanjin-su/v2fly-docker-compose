@@ -7,9 +7,9 @@
 1. 安装 docker 和 docker-compose，并启动 docker 服务。由于网络上教程很多，这里不再赘述，可以参考以下教程：[安装 Docker](https://yeasy.gitbook.io/docker_practice/install)，[安装 Docker Compose](https://yeasy.gitbook.io/docker_practice/compose/install)。
 
 1. 克隆本项目：
-	```bash
-	git clone https://github.com/chuanjin-su/v2ray-docker-compose.git
-	```
+    ```bash
+    git clone https://github.com/chuanjin-su/v2ray-docker-compose.git
+    ```
 
 1. 准备一个域名，然后把 A 记录解析改为你服务器的 ip；如果有 ipv6 需求，添加 AAAA 记录解析到 ipv6 地址。
 
@@ -19,33 +19,33 @@
 
 1. 对域名申请认证，并将证书 `cert.pem` 和密钥 `key.pem` 放置在 `./nginx/certs/` 下面。如果你没有进行过这样的认证，推荐使用 [`acme.sh`](https://github.com/Neilpang/acme.sh/wiki/%E8%AF%B4%E6%98%8E) 进行这一操作。简要步骤如下：
 
-	1. 安装 `acme.sh`，一行命令即可。这一操作会将 `acme.sh` 安装在 `~/.acme.sh` 下面，同时自动创建一个 cronjob, 每天 0:00 点检测所有的证书, 如果快过期了, 需要更新, 则会自动更新证书。注意将以下命令的邮件改为你的邮件地址。
-		```bash
-		curl https://get.acme.sh | sh -s email=my@example.com
-		```
+    1. 安装 `acme.sh`，一行命令即可。这一操作会将 `acme.sh` 安装在 `~/.acme.sh` 下面，同时自动创建一个 cronjob, 每天 0:00 点检测所有的证书, 如果快过期了, 需要更新, 则会自动更新证书。注意将以下命令的邮件改为你的邮件地址。
+        ```bash
+        curl https://get.acme.sh | sh -s email=my@example.com
+        ```
 
-	1. 申请证书。推荐使用手动 DNS 方式，执行命令，注意改为自己的域名：
-		```bash
-		acme.sh --issue --dns -d your.domain.com \
- 			--yes-I-know-dns-manual-mode-enough-go-ahead-please
-		```
-		这时，会返回类似如下的输出：
-		![](./images/acme.png)
-		添加域名解析的TXT记录，解析到 `_acme-challenge.your.domain.com`，内容为如上显示的 `TXT value` 后面的一长串。
+    1. 申请证书。推荐使用手动 DNS 方式，执行命令，注意改为自己的域名：
+        ```bash
+        acme.sh --issue --dns -d your.domain.com \
+             --yes-I-know-dns-manual-mode-enough-go-ahead-please
+        ```
+        这时，会返回类似如下的输出：
+        ![](./images/acme.png)
+        添加域名解析的TXT记录，解析到 `_acme-challenge.your.domain.com`，内容为如上显示的 `TXT value` 后面的一长串。
 
-	1. 获得证书和密钥。以上操作后，再在命令行输入：
-		```bash
-		acme.sh --renew -d your.domain.com \
- 			--yes-I-know-dns-manual-mode-enough-go-ahead-please
-		```
-		注意这时的选项是 `--renew`。一通操作后，如果顺利的话，`acme.sh` 会将你的证书和密钥存放在本地 `~/.acme.sh/your.domain.com/`之中。
+    1. 获得证书和密钥。以上操作后，再在命令行输入：
+        ```bash
+        acme.sh --renew -d your.domain.com \
+             --yes-I-know-dns-manual-mode-enough-go-ahead-please
+        ```
+        注意这时的选项是 `--renew`。一通操作后，如果顺利的话，`acme.sh` 会将你的证书和密钥存放在本地 `~/.acme.sh/your.domain.com/`之中。
 
 1. 接着把证书安装到 `./nginx/certs/` 目录下：
-	```bash
-	acme.sh --install-cert -d you.domain.com \
-	--cert-file      ./nginx/certs/cert.pem  \
-	--key-file       ./nginx/certs/key.pem
-	```
+    ```bash
+    acme.sh --install-cert -d you.domain.com \
+    --cert-file      ./nginx/certs/cert.pem  \
+    --key-file       ./nginx/certs/key.pem
+    ```
 
 1. 修改 `./nginx/conf.d/v2ray.conf` [第 8 行](./nginx/conf.d/v2ray.conf#L8) 的域名地址。
 
@@ -72,28 +72,28 @@ ipv6: true
 
 proxies:
   - {
-		name: myproxy,
-		server: your.domain.com,
-		port: 443,
-		type: vmess,
-		uuid: your_uuid,
-		sni: ,
-		alterId: 0,
-		cipher: auto,
-		tls: 1,
-		skip-cert-verify: true,
-		udp: true,
-		network: ws,
-		ws-opts: {
-			path: /v2ray
-		}
-	}
+        name: myproxy,
+        server: your.domain.com,
+        port: 443,
+        type: vmess,
+        uuid: your_uuid,
+        sni: ,
+        alterId: 0,
+        cipher: auto,
+        tls: 1,
+        skip-cert-verify: true,
+        udp: true,
+        network: ws,
+        ws-opts: {
+            path: /v2ray
+        }
+    }
 
 proxy-groups:
   - name: proxy
-	type: select
-	proxies:
-	  - myproxy
+    type: select
+    proxies:
+      - myproxy
 
 rules:
  - MATCH,proxy
