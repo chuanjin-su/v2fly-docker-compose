@@ -18,7 +18,7 @@ services:
     networks:
       - v2ray_proxy
     ports:
-      # - 80:80
+      - 80:80
       - 443:443
     links:
       - v2ray_proxy
