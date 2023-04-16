@@ -8,7 +8,7 @@
 
 1. 克隆本项目：
     ```bash
-    git clone https://github.com/chuanjin-su/v2ray-docker-compose.git
+    git clone https://github.com/chuanjin-su/v2fly-docker-compose.git
     ```
 
 1. 准备一个域名，然后把 A 记录解析改为你服务器的 ip；如果有 ipv6 需求，添加 AAAA 记录解析到 ipv6 地址。
