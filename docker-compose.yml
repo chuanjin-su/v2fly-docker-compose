@@ -1,29 +1,31 @@
 version: "3.4"
 
 services:
-  v2ray:
-    image: v2ray/official:latest
-    container_name: v2ray
+  v2ray_proxy:
+    image: v2fly/v2fly-core:latest
+    container_name: v2ray_proxy
     restart: always
+    command: ["run", "-config", "/etc/v2ray/config.json"]
     networks:
-      - v2ray
+      - v2ray_proxy
     volumes:
       - ./v2ray:/etc/v2ray
+      - ./v2ray_log:/var/log/v2ray/
 
-  nginx:
+  nginx_proxy:
     image: nginx:alpine
-    container_name: nginx
+    container_name: nginx_proxy
     networks:
-      - v2ray
+      - v2ray_proxy
     ports:
-      - 80:80
+      # - 80:80
       - 443:443
     links:
-      - v2ray
+      - v2ray_proxy
     volumes:
       - ./nginx/certs:/etc/nginx/certs
       - ./nginx/conf.d:/etc/nginx/conf.d
     restart: always
 
 networks:
-  v2ray:
+  v2ray_proxy:
