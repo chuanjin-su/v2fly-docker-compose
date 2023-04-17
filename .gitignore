@@ -1,0 +1,4 @@
+v2ray_log/access.log
+v2ray_log/error.log
+nginx/certs/cert.pem
+nginx/certs/key.pem
